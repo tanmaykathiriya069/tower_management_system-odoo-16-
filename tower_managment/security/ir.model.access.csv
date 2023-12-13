@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tower_manage,access.tower.manage,tower_managment.model_tower_manage,,1,1,1,1
+access_towers_towers,access.towers.towers,tower_managment.model_towers_towers,,1,1,1,1
+access_floor_floor,access.floor.floor,tower_managment.model_floor_floor,,1,1,1,1
+access_services_services,access.services.services,tower_managment.model_services_services,,1,1,1,1
+access_emanities_emanities,access.emanities.emanities,tower_managment.model_emanities_emanities,,1,1,1,1
+access_emanities_emanities_1,access.emanities.emanities.1,tower_managment.model_emanities_emanities,tower_managment.group_tower_secretory,1,1,1,1
+access_emanities_emanities_new,access.emanities.emanities.new,tower_managment.model_emanities_emanities,tower_managment.group_tower_customer_residence,1,1,1,1
+access_document_type,access.document.type,tower_managment.model_document_type,,1,1,1,1
+access_tower_floor,access.tower_floor,tower_managment.model_tower_floor,,1,1,1,1
+access_document_information,access.document.information,tower_managment.model_document_information,,1,1,1,1
+access_tower_flat,access.tower.flat,tower_managment.model_tower_flat,,1,1,1,1
+access_tips_info,access.tips.info,tower_managment.model_tips_info,,1,1,1,1
+access_sale_info,access.sale.info,tower_managment.model_sale_info,,1,1,1,1

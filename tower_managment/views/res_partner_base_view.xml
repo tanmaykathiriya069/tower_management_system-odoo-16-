@@ -1,0 +1,71 @@
+<odoo>
+    <data>
+        <record id="view_res_partner_inherit_view" model="ir.ui.view">
+            <field name="name">view.res.partner.inherit.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">            
+                <xpath expr="//div[hasclass('oe_title')]/h1/field[@name='name'][2]" position="after">
+                    <field name="last_name"/>
+                </xpath>
+                
+                <field name="vat" position="before">
+                    <field name="gst_no"/>
+                </field>
+                
+                <field name="vat" position="replace">
+                    <field name="skype"/>
+                    <xpath expr="//group/group[2]/field[@name='website']" position="move" />
+                </field>
+                
+                <xpath expr="//page[@name='sales_purchases']/group[@name='container_row_2']" position="inside">
+                    <group string="Testing">
+                    </group>
+                </xpath>
+                
+              	<field name="category_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
+                    <!-- <attribute name="readonly">1</attribute> -->
+                </field> 
+                
+                <xpath expr="//group/group[2]/field[@name='category_id']" position="attributes">
+                	<attribute name="domain">[('name','in',('Vendor','Prospects','Employees'))]</attribute>
+                </xpath>
+                
+                <xpath expr="//page[@name='internal_notes']" position="inside">
+                	<group string='Remark'>
+                		<field name="remark"/>	
+                	</group> 
+                </xpath>
+                
+              <!-- <xpath expr="//group/group[2]/field[@name='phone']" position="attributes">
+                	<attribute name="attrs">{'invisible':[('company_type', '=', 'person')]}</attribute>
+                	<attribute name="invisible">1</attribute>
+                </xpath>  -->
+                	
+             	<field name="phone" position="attributes">
+                    <!-- <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute> -->
+                    <attribute name="invisible">1</attribute> 
+                </field> 
+                
+                <xpath expr="//notebook" position="inside">
+                	<page name="Document">
+							<group>
+								<field name="total_document"/>
+							</group>
+							<field name="document_ids">								
+									<tree editable="bottom">
+										<field name="document_id" domain="[('document_type','in',('customer',False))]"/>
+										<field name="upload_file" filename="file_name"/>
+	                                    <field name="file_name" invisible="1"/>
+									</tree>
+							</field>	
+					</page>
+                </xpath>
+               <!--  <xpath expr="//notebook/page[@name='document']" position="attributes">
+                	<attribute name="domain">[('document_type','=','customer')]</attribute>
+                </xpath> -->               
+            </field>
+        </record>
+    </data>
+</odoo>

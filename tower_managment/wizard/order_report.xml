@@ -1,0 +1,145 @@
+<odoo>
+    <record id="action_order_report" model="ir.actions.report">
+        <field name="name">Order report</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tower_managment.order_report</field>
+        <field name="report_file">tower_managment.order_report</field>
+        <field name="print_report_name">'Sales - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record> 
+
+   <template id="order_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h1 class="text-center">Invoice</h1>
+                        <div>
+                            <h3><b>Order ID:<t t-esc="o.name"/></b></h3>
+                        </div>    
+
+                        <div class="row" style="margin-top:25px;">
+                            <div class="col-4">
+                                <b>Customer:</b><p><span t-field="o.partner_id"/></p>
+                                <b>Date Order:</b><p><t t-esc="o.date_order"/></p>
+                                <b>Salesperson:</b><p><span t-field="o.user_id"/></p>
+                            </div>
+
+                            <div class="col-4">
+                                <b>Quotation Template:</b><p><span t-field="o.sale_order_template_id"/></p>
+                                <b>Payment Terms:</b><p><span t-field="o.payment_term_id"/></p>
+                                <b>Order State</b><p><t t-esc = "dict(o._fields['state'].selection).get(o.state)"/></p>
+                            </div> 
+
+                            <div class="col-4">
+                                
+                                <b>Address:</b>
+                                <p>
+                                    Street:<t t-esc="o.partner_id.street"/><br/>
+                                    City:<t t-esc="o.partner_id.city"/><br/>
+                                    Zip Code:<t t-esc="o.partner_id.zip"/><br/>
+                                    State:<span t-field="o.partner_id.state_id"/><br/>
+                                    Country:<span t-field="o.partner_id.country_id"/>
+                                </p>
+                            </div>
+
+                            
+                        </div>
+
+                        
+                        <div>
+                            <table class="table" style="margin-top: 25px;">
+                                <!-- class="table table-bordered" style="border: 1px solid black;" -->
+                                        <tbody>
+                                            <tr style="background-color:#A9A9A9; text-align: center;">
+                                            <!-- style="border: 3px solid black;width:50%; background-color:#F8F8F8;" -->
+                                                <th scope="col">Sr No.</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Discription</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Unit Price</th>
+                                                <th scope="col">Subtotal</th>
+                                            </tr>
+                                            
+                                            <t t-set="sr" t-value="0"/>
+                                            <t t-foreach="o.order_line" t-as="doc">
+                                                <t t-set="sr" t-value="sr + 1"/> 
+                                                <tr>
+                                                    <td>
+                                                       <t t-esc="sr"/> 
+                                                    </td>
+                                                    <td style="text-align: center;weight:50%;">
+                                                        <span t-field="doc.product_template_id"/>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.name" />  
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.price_unit"/> 
+                                                    </td>
+                                                    <!-- <td >
+                                                        <span t-field="doc.tax_id"/>
+                                                    </td> -->
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.price_subtotal"/>
+                                                    </td>
+                                                </tr>
+                                               
+                                            </t>
+                                            
+                                            <!-- <tr style="background-color:#F8F8F8; font-weight:bold;">
+                                                <td style="text-align:right;">Total</td>
+                                                <td style="text-align: center;"><t t-esc="o.total_shops"/></td>
+                                                <td style="text-align: center;"><t t-esc="o.total_flats"/></td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                    
+                                    <!-- <hr style="width:50%;float: right;">
+                                    
+
+                                    
+                                    <p style="float: right;">Total:<span t-field="o.amount_total"/></p> -->
+                                        
+
+                                      
+                                    
+                                   
+                                    
+
+                        </div>
+                        <!-- <hr style="width:50%;float: right;"/> -->
+                        <!-- <div>
+                            <hr style="width:50%;float: right;"/>
+                        </div> -->
+                        <div style="float:right; width:50%; text:right;margin-top: 15px;">
+                            <table style=" width:40%; height:35px;float:right;">
+                                <tr>
+                                    <td style = "font-weight: bold; padding-top: 10px; padding-bottom: 10px;color:#FEFEFE;"></td>
+                                    <td style = "font-weight: bold; padding-top: 10px; padding-bottom: 10px;">Total:<span t-field="o.amount_total"/></td>
+                                    
+                                </tr>
+                                
+                                <tr>
+                                    <td style = "font-weight: bold; padding-top: 10px; padding-bottom: 10px; color:#FEFEFE;">Signature</td>
+                                    
+                                    <td style = "font-weight: bold;">Signature:<img style="width: 150px; height: 150px; padding-top: 10px; padding-bottom: 10px; padding-right:10px;" t-if="o.signature" t-att-src="image_data_uri(o.signature)" class="float-end" alt="Logo"/></td>
+                                </tr>
+                                
+                            </table>
+                        </div>  
+
+                        
+
+                       
+                    </div>
+                </t>
+            </t>
+        </t>    
+    </template>
+</odoo>

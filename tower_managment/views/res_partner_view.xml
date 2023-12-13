@@ -1,0 +1,92 @@
+<odoo>
+	<record id="res_partner_from_view" model="ir.ui.view">
+		<field name="name">res.partner.from.view</field>
+		<field name="model">res.partner</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="add_wizard" type="object" string="Wizrad" class ="oe_highlight"/>
+				</header>
+				<sheet>
+					<field name="image" widget="image"  class="oe_avatar" />	
+					<group>				
+						<group>
+							<field name="name" placeholder="Enter Your Full Name..."/>
+							<field name="active_customer"/>
+							<field name="mobile" placeholder="Enter Your Mobile Number..." widget='phone'/>
+							<field name="gender" placeholder="Select Gender"/>
+							<field name="date_of_birth" placeholder="Enter Your Birth Date"/>
+							<field name="age"/>
+							<field name='email' widget="email"/>
+						</group>
+						<group>
+							<span>
+								<b>Address</b>
+							</span>
+							<div class="o_address_format">              
+                               	<field name="street" placeholder="Street Name..." class="o_address_street"/>
+                               	<field name="city" placeholder="City..." class="o_address_city"/>
+                               	<field name="zip" placeholder="Zip Code" class="o_address_zip"/>
+                               	<field name="state_id" class="o_address_state" placeholder="State"/>
+                               	<field name="country_id" placeholder="Country" class="o_address_street" />
+                            </div>
+						</group>	
+					</group>
+					<notebook>
+						<page string="Document">
+							<group>
+								<field name="total_document"/>
+							</group>
+							<field name="document_ids">
+								<tree editable="bottom">
+									<field name="document_id" domain="[('document_type','in',('customer',False))]"/>
+									<field name="upload_file" filename="file_name"/>
+                                    <field name="file_name" invisible="1"/>
+								</tree>
+							</field>	
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<record id="res_partner_tree_view" model="ir.ui.view">
+		<field name="name">res.partner.tree.view</field>
+		<field name="model">res.partner</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				
+			</tree>
+		</field>
+	</record>
+	
+	
+	<record id="res_partner_action_view" model="ir.actions.act_window">
+		<field name="name">Customer</field>
+		<field name="res_model">res.partner</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+	<record id="act_res_partner_action_view_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="res_partner_action_view"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="res_partner_tree_view"/>
+    </record>
+
+    <record id="act_custom_res_partner_action_view_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="res_partner_action_view"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="res_partner_from_view"/>
+    </record> 
+    
+    <menuitem id= "res_partner_menu"
+    	name="Customer"
+    	parent="tower_managment.tms_menu"
+    	action="tower_managment.res_partner_action_view"
+		groups="tower_managment.group_tower_secretory"
+    	sequence="5"
+    	/>
+</odoo>

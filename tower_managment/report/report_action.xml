@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="action_lms_report" model="ir.actions.report">
+        <field name="name">TMS Report</field>
+        <field name="model">towers.towers</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tower_managment.tms_report</field>
+        <field name="report_file">tower_managment.tms_report</field>
+        <field name="print_report_name">'TMS - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="tower_managment.model_towers_towers"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="tms_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                            <h1 class="text-center"><b><t t-esc="o.name" /></b></h1><br/>
+                            <!-- <h2 style="text-align: center;"><u>Image</u></h2> -->
+                            
+                            
+                            <!-- <h3 style="text-align: left;"><u>Tower Address</u></h3>
+                            <div style="text-align: left;">
+                                <t t-esc="o.street_name"/><br/>
+                                <t t-esc="o.city"/><br/>
+                                <t t-esc="o. zip_code"/><br/>
+                                <span t-field="o.state_id"/><br/>
+                                <span t-field="o.country_id"/><br/>
+                            </div><br/> -->
+                            <div class="row">
+                        
+                                <div class="col-4">
+                                    <h6><u>Mobile Number</u></h6>
+                                    Mobile Number:<t t-esc="o.mobile_no"/>
+                                </div>
+
+                                <div class="col-4">
+                                    <h6><u>Email</u></h6>
+                                    Email Id:<t t-esc="o.email"/>
+                                </div>
+
+                                <div class="col-4">
+                                    <img t-if="o.image" t-att-src="image_data_uri(o.image)" class="float-end" alt="Logo" width="250" height="150"/>
+                                </div>
+                            </div>
+                            <!-- <img t-if="o.image" t-att-src="image_data_uri(o.image)" class="float-end" alt="Logo" width="250" height="150" style="text-align: right;margin-bottom:20px;"/> -->
+                            <div class="row">
+
+                                <div class="col-6">
+                                    <h2><u>Tower Floors</u></h2>
+                                    <table style=" width:50%;margin-top:15px;" >
+                                <!-- class="table table-bordered" style="border: 1px solid black;" -->
+                                        <tbody>
+                                            <tr style="background-color:#A9A9A9; text-align: center;">
+                                            <!-- style="border: 3px solid black;width:50%; background-color:#F8F8F8;" -->
+                                                <th >Floor Name</th>
+                                                <th >Shops</th>
+                                                <th >Flats</th>
+                                            </tr>
+                                            
+                                            <t t-foreach="o.floor_ids" t-as="doc">
+                                                <tr style="background-color:#D3D3D3">
+                                                    <td style="text-align: center;">
+                                                        <span t-field="doc.floor_id"/>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.no_of_shops" />
+                                                        <!-- <t t-esc="doc.total_shops"/> -->
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <t t-esc="doc.no_of_flats"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            
+                                            <tr style="background-color:#F8F8F8; font-weight:bold;">
+                                                <td style="text-align:right;">Total</td>
+                                                <td style="text-align: center;"><t t-esc="o.total_shops"/></td>
+                                                <td style="text-align: center;"><t t-esc="o.total_flats"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-6">
+                                    <h3><u>Address</u></h3>
+                                    Street:<t t-esc="o.street_name"/>
+                                    City:<t t-esc="o.city"/><br/>
+                                    Zip Code:<t t-esc="o. zip_code"/><br/>
+                                    State:<span t-field="o.state_id"/><br/>
+                                    Country:<span t-field="o.country_id"/><br/>
+                                </div>
+
+                                
+                            </div>
+                            
+                            <!-- <div>
+                                <t t-esc="o.mobile_no"/>
+                            </div>
+                            <h3 style="float: right;"><u>Email ID</u></h3>
+                            <div style="float: right;">
+                                <t t-esc="o.email"/>
+                            </div> -->
+                            
+                            
+                            <!-- <h2 style="text-align: right;">Image</h2> -->
+                                <!-- <h2 style="text-align: center;">Image</h2> -->
+                            <!-- <img t-if="o.image" t-att-src="image_data_uri(o.image)" class="float-end" alt="Logo" width="250" height="150" style="text-align: right; margin-top: 45px;"/> -->
+                            
+                           
+                            
+
+                            
+
+
+                            <h2 style="margin-top: 20px;"><u>Tower Amenities</u></h2>    
+                            <div>
+                                <table class="table table-bordered" style="border: 1px solid black;" >
+                                    <tbody>
+                                        <tr style="border: 3px solid black;width:50%; text-align: center;" >
+                                            <th style="background-color:#A9A9A9;">Tower Amenities</th>
+                                            <th style="background-color:#A9A9A9;">Flat Maintenance</th> 
+                                            <th style="background-color:#A9A9A9;">Shop Maintenance</th>
+                                            <th style="background-color:#A9A9A9;">Cost Of Amenities</th>
+                                        </tr>    
+
+                                        <t t-foreach="o.emanities_ids" t-as="ema">
+                                            <tr>
+                                                <td style="text-align: center;background-color:#D3D3D3">
+                                                    <span t-field="ema.emanities_id"/>
+                                                </td>
+                                                <td style="text-align: right;background-color:#D3D3D3"><t t-esc="ema.total_flat_maintananace"/></td>
+                                                <td style="text-align: right;background-color:#D3D3D3"><t t-esc="ema.total_shop_maintananace"/></td>
+                                                <td style="text-align: right;background-color:#D3D3D3"><t t-esc="ema.maintananace"/></td>
+                                            </tr>
+                                        </t>
+                                        <tr style="font-weight:bold;">
+                                            <td style="visibility: hidden;"></td>
+                                            <br/>
+                                            <td style="text-align: right;background-color:#F8F8F8;"><t t-esc="o.total_flats_maintananace"/></td>
+                                            <td style="text-align: right;background-color:#F8F8F8;"><t t-esc="o.total_shops_maintananace"/></td>
+                                            <td style="text-align: right;background-color:#F8F8F8;"><t t-esc="o.total_cost"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div><br/>
+                            <h2 style="page-break-before:always;"><u>Tower Services</u></h2>
+                            
+                            <div>
+                                <t t-foreach="o.service_ids" t-as="ser">
+                                    <ul>
+                                        <li><b><span t-field="ser.service_id.name"/></b></li>
+                                        <p align = "justify">
+                                            <ld><span t-field="ser.service_id.description"/></ld>
+                                        </p>
+                                    </ul>
+                                </t>
+                            </div>
+
+                            <h2><u>Remark</u></h2>
+                            <div>
+                                <p><t t-esc="o.remark"/></p>
+                            </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

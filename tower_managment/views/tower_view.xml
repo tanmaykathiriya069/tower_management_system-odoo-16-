@@ -1,0 +1,569 @@
+<odoo>
+    <data>
+    <!-- Tower managment **************************************************************************************************-->
+        <record id="tower_manage_view_form" model="ir.ui.view">
+            <field name="name">tower.manage.view.form</field>
+            <field name="model">tower.manage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,pending"/>
+                        <button name="action_pending" string="Pending" type="object" states="draft"/>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="pending"/>
+                        <button name="reset_to_draft" string="Reset to Draft" type="object" attrs="{'invisible': [('state', 'in', ['draft', 'pending'])]}"/>                 		 
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="age" />
+                                <field name="mobile" widget="phone" />
+                                <span>
+                                    <b>Address</b>
+                                </span>
+                                <div class="o_address_format">
+                           
+                                        <field name="street_name" placeholder="Street Name..." class="o_address_street"/>
+                                        <field name="city" placeholder="City..." class="o_address_city"/>
+                                        <field name="zip_code" placeholder="Zip Code" class="o_address_zip"/>
+                                        <!-- <field name="state_id" class="o_address_state" placeholder="State"/>
+                                        <field name="country_id" placeholder="Country" class="o_address_street" /> -->
+                                </div>
+                            </group>
+                            <group>
+                                <field name="image" widget="image" class="oe_avatar" style="height:100px; width:100px"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="tower_manage_view_kanban" model="ir.ui.view">
+            <field name="name">tower.manage.view.kanban</field>
+            <field name="model">tower.manage</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="state" options="{&quot;group_by_tooltip&quot;: {&quot;requirements&quot;: &quot;Description&quot;}}"/>
+                    <progressbar field="state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="expected_revenue" recurring_revenue_sum_field="recurring_revenue_monthly" help="This bar allows to filter the opportunities based on scheduled activities."/>
+                    
+                    <field name="state" widget="progressbar" class="oe_progressbar_color"/>
+                    <field name="id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click" style="height:135px;">
+                                <div style="width:40%;float:left;display:inline-block;">
+                                    <img class="o_kanban_image_inner_pic" t-att-src="kanban_image('tower.tower','owner_image',record.id.raw_value)" style="width:100px;height:120px;" widget="image" alt="demo"/>
+                                </div>
+                                <div style="width:60%;float:right;display:inline-block;">
+                                    <div class="oe_kanban_details d-flex flex-column justify-content-between">
+                                    <div>
+                                        <strong class="o_kanban_record_title oe_partner_heading"><field name="name"/></strong>
+                                        <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                        <!-- <ul>
+    
+                                            <li ><field name="mobile"/></li>
+                                            
+                                            <li t-if="record.city.raw_value or record.country_id.raw_value">
+                                                <t t-if="record.city.raw_value"><field name="city"/><t t-if="record.country_id.raw_value">, </t></t> -->
+                                                <!-- <t t-if="record.country_id.raw_value"><field name="country_id"/></t> -->
+                                            <!-- </li> -->
+                                            <!-- <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li> -->
+                                        <!-- </ul> -->
+                                        </div>
+                                    </div><!-- 
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left"/>
+                                        <div class="oe_kanban_bottom_right"/>
+                                    </div> -->
+                                    
+                                
+                                </div>
+                            </div><!-- 
+                            <div class="clearfix"/> -->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="tower_manage_view_tree" model="ir.ui.view">
+            <field name="name">tower.manage.view.tree</field>
+            <field name="model">tower.manage</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" required="1"/>
+                    <field name="age"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="tower_manage_action" model="ir.actions.act_window">
+            <field name="name">Tower Managment</field>
+             <field name="res_model">tower.manage</field>
+             <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+    <!-- Tower Management menuitem ********************************************************************************** -->
+         <menuitem
+            id="tms_menu"
+            name="Tower Management"
+            sequence="1"/>
+            
+    <!-- Configuration menuitem ********************************************************************* -->
+        <menuitem
+            id="configuration_menu"
+            name="Configuration"
+            parent="tms_menu"
+            action="tower_managment.tower_manage_action"
+            sequence="2"/>
+
+
+    <!-- Towers ******************************************************************************************* -->
+        <record id="towers_towers_view_form" model="ir.ui.view">
+            <field name="name">towers.towers.view.form</field>
+            <field name="model">towers.towers</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,pending"/>
+                        <button name="action_pending" string="Pending" type="object" states="draft"/>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="pending"/>
+                        <button name="reset_to_draft" string="Reset to Draft" type="object" attrs="{'invisible': [('state', 'in', ['draft', 'pending'])]}"/>
+                        
+                  		 
+                    </header>
+                    
+                    <header>
+                   <!--   	<button name="%(tower_manage_action)d" type="action" string="Tower" class="oe_highlight"/>  	-->
+                   		<button name="update" type="object" string="Update" class ="oe_highlight"/> 
+                        <!-- <button name="wizard_add" type="object" string="Wizard" class="oe_highlight"/> -->
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_open_documents" type="object" icon="fa-file" >
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="total_document"/>
+                                    </span>
+                                    <span class="o_stat_text">Documents</span>
+                                </div>
+                            </button>
+                        </div>    
+                        <!-- <field name="image" widget="image"  class="oe_avatar" /> -->	 
+                        
+                        <h1>TOWER DETAIL</h1>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                           		<field name="mobile_no" placeholder="Enter The Mobile Number..." widget="phone"/>
+                                <field name="flat_active"/>
+                                <!--<field name="country"/> -->
+                                <field name="country_id"/>
+                                <field name="state_id"/>
+                                <field name="secretory_id" />
+                                
+                                <!--<field name="state_name"/>  -->
+                                <field name="email" widget="email"/>
+                              <!--    <field name="address"/>  -->
+                            	<!--  <field name="emanities_emanities_ids" widget="many2many_tags"/> -->
+                           
+                           		<span>
+                           			
+                           			<b>Address</b>
+                           		</span>
+                                <div class="o_address_format">
+                           
+                               		<field name="street_name" placeholder="Street Name..." class="o_address_street"/>
+                               		<field name="city" placeholder="City..." class="o_address_city"/>
+                               		<field name="zip_code" placeholder="Zip Code" class="o_address_zip"/>
+                               		<field name="state_id" class="o_address_state" placeholder="State"/>
+                               		<field name="country_id" placeholder="Country" class="o_address_street" />
+                                </div>
+                                
+                          <!--    	<field name="total_flats" />  -->
+                            <!--    <field name="total_shops" />  -->
+                                
+                            </group> 
+                            <group>
+                                 <field name="image" widget="image" class="oe_avatar" /> 
+                                  <!--<field name="services_ids">
+                                	<tree editable="bottom">
+                                		<field name="service_id"/>
+                                	</tree>
+                                </field> -->
+                              <!--  <field name="service_ids" widget="many2many_tags"/>  -->
+                            </group>
+                            
+                                
+                            
+                            <notebook>
+                                <page string='Floor Name'>
+                 					 <group>
+                                        <group >
+                                            <field name="total_flats" groups="tower_managment.group_tower_customer_residence" />
+                                      	  	<field name="total_shops" groups="tower_managment.group_tower_customer_shop"/>
+                                        </group>
+                                       	<group>
+                                            <field name="per_flat_maintananace" groups="tower_managment.group_tower_customer_residence"/>
+                                            <field name="per_shop_maintananace" groups="tower_managment.group_tower_customer_shop"/>                                            
+                                        </group>
+                                            
+                                     </group>
+                                    <field name="floor_ids">
+                                        <tree editable='bottom'>
+                                            <field name="floor_id"/>
+                                            <field name="no_of_shops" groups="tower_managment.group_tower_customer_shop"/>
+                                            <field name="no_of_flats" groups="tower_managment.group_tower_customer_residence"/>
+                                        	<button name="Add_Flats" type="object" string="Add flats" class ="oe_highlight"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Amenities" groups="tower_managment.group_tower_customer_residence">
+                                	<group>
+                                        <group>
+                                            <field name="total_cost" />
+                                            <field name="total_flats_maintananace" />
+                                        </group>
+                                		
+                                        <group>
+                                            <field name="total_shops_maintananace" />
+                                        </group>
+                                        
+                                	</group>
+                                    
+                                    <field name="emanities_ids">
+                                    
+                                        <tree editable="bottom">
+                                            <field name="emanities_id"/>
+                                            <field name="flat_maintananace" widget="percentage" />
+                                            <field name="shop_maintananace" widget="percentage" />
+                                            <field name="total_flat_maintananace" />
+                                            <field name="total_shop_maintananace" />
+                                            <field name="maintananace"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Documents">
+                                    <group>
+                                        <field name="total_document" />
+                                    </group>
+                                    <field name="document_ids">
+                                        <tree editable="bottom">
+                                            <field name="document_id" domain="[('document_type','in',('property',False))]"/>
+                                            <field name="upload_file" filename="file_name"/>
+                                            <field name="file_name" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                 </page> 
+                                 <page string = "Services">
+                                    <group>
+                                        <group>
+                                            <field name="total_flats_service_maintananace"/>
+                                        </group>
+                                        <group>
+                                            <field name="total_shops_service_maintananace" />
+                                        </group>
+                                    </group>
+                                 	<field name = "service_ids">
+                                 		<tree editable="bottom">
+                                 			<field name = "service_id"/>
+                                            <field name="flat_services_maintananace" widget="percentage"/>
+                                            <field name="shop_services_maintananace" widget="percentage"/>
+                                            <field name="total_flat_service_maintananace"/>
+                                            <field name="total_shop_service_maintananace"/>
+                                            <field name="services_maintananace" />
+                                            
+                                            
+                                 		</tree>
+                                 	
+                                 	</field>
+                                 
+                                 </page>    
+                                   
+                                <page string="Remark">
+                                    <field name="remark" />
+                                </page>
+                            </notebook>
+                        </group>    
+                    </sheet>
+
+                    <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>   
+                            <field name="message_ids" widget="mail_thread"/>   
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="towers_towers_view_tree" model="ir.ui.view">
+            <field name="name">towers.towers.view.tree</field>
+            <field name="model">towers.towers</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" required="1"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="towers_towers_action_menu" model="ir.actions.act_window">
+            <field name="name">Towers</field>
+            <field name="res_model">towers.towers</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field> 
+     <!--         <field name="context">{'default_remark':'Good'}</field>-->
+        </record>
+
+        <menuitem
+            id="towers_menu"
+            name="Towers"
+            parent="tower_managment.configuration_menu"
+            action="tower_managment.towers_towers_action_menu"
+            sequence="1"/>
+
+
+
+    <!-- Floor Menuitem *********************************************************************************************************  -->
+
+        <record id="floor_floor_view_tree" model="ir.ui.view">
+            <field name="name">floor.floor.view.tree</field>
+            <field name="model">floor.floor</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    
+                    <field name="name" required="1"/>
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="floor_floor_action" model="ir.actions.act_window">
+            <field name="name">Floor</field>
+            <field name="res_model">floor.floor</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="floor_menu"
+            name="Floor"
+            parent="tower_managment.configuration_menu"
+            action="tower_managment.floor_floor_action"
+            sequence="2"/>
+
+
+    <!-- Services Menuitem *************************************************************************************************************** -->
+
+        <record id="services_services_view_tree" model="ir.ui.view">
+            <field name="name">services.services.view.tree</field>
+            <field name="model">services.services</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="services_services_action" model="ir.actions.act_window">
+            <field name="name">Services</field>
+            <field name="res_model">services.services</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <menuitem
+            id="services_menu"
+            name="Services"
+            parent="tower_managment.configuration_menu"
+            action="tower_managment.services_services_action"
+            sequence="3"/>
+    <!-- Aeminities Menuitem ************************************************************************************************************ -->
+
+        <!-- <record id="emanities_emanities_view_tree" model="ir.ui.view">
+            <field name="name">emanities.emanities.view.tree</field>
+            <field name="model">emanities.emanities</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="emanities_emanities_action" model="ir.actions.act_window">
+            <field name="name">Emanities</field>
+            <field name="res_model">emanities.emanities</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <menuitem
+            id="emanities_menu"
+            name="Emanities"
+            parent="tower_managment.configuration_menu"
+            action="tower_managment.emanities_emanities_action"
+            groups="group_tower_customer_residence"
+            sequence="4"/> -->
+
+        <!-- Document Type Menuitem *********************************************************************************************************** -->
+        
+        <record id="document_type_view_tree" model="ir.ui.view">
+            <field name="name">document.type.view.tree</field>
+            <field name="model">document.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                    <field name="document_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="document_type_action" model="ir.actions.act_window">
+            <field name="name">Document Type</field>
+            <field name="res_model">document.type</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <menuitem
+            id="document_type_menu"
+            name="Document Type"
+            parent="tower_managment.configuration_menu"
+            action="tower_managment.document_type_action"
+            sequence="5"/> 
+
+        <!-- Document Information Manuitem ****************************************************************************************************** -->
+
+
+        <record id="document_information_view_tree" model="ir.ui.view">
+            <field name="name">document.information.view.tree</field>
+            <field name="model">document.information</field>
+          
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="tower_document_id"/>
+                    <field name="document_id"/>
+                    <field name="upload_file" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="document_information_action" model="ir.actions.act_window">
+            <field name="name">Documents</field>
+            <field name="res_model">document.information</field>
+            <field name="view_mode">tree</field>	
+            <field name="domain">[]</field>
+        </record>
+        <menuitem
+            id="document_information_menu"
+            name="Documents"
+            parent="tms_menu"
+            action="tower_managment.document_information_action"
+            sequence="5"/>
+
+
+ <!--   Search view  *********************************************************************************************************************************************-->
+ 
+        <!-- Tower.Manage model search view *********************************** -->
+        <record id="view_tower_manage_search" model="ir.ui.view">
+            <field name="name">view.tower.manage.search</field>
+            <field name="model">tower.manage</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Tower"/>
+                    
+                    <field name="age" string="Age" filter_domain="[('age', '>=', self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Age" name="group_by_birth_state" domain="[]"
+                            context="{'group_by': 'age'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+		
+		<!-- Towers.Towers model search view ************************************* -->
+    <!--      <record id="view_towers_towers_search" model="ir.ui.view">
+            <field name="name">view.towers.towers.search</field>
+            <field name="model">towers.towers</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="country" string="Country"/>
+                    <field name="state" string="State" />
+                    <group expand="0" string="Group By">
+                        <filter string="Country" name="group_by_country" domain="[]"
+                            context="{'group_by': 'country'}"/>
+                    </group>
+                </search>
+            </field>
+        </record> -->
+        
+        
+        <!-- Document.Information model search view *********************************** -->
+        <record id="view_document_information_search" model="ir.ui.view">
+        	<field name="name">viewdocument.information.search</field>
+        	<field name="model">document.information</field>
+        	<field name="arch" type="xml">
+        		<search>
+        			<field name="name" string="Document"/>
+        			<group expand="0" string="Group By">
+        				<filter string="Document" name="group_by_document" domain="[]"
+        					context="{'group_by':'tower_document_id'}"/>
+        			</group>
+        		</search>
+        	</field>
+        </record>
+        
+        
+<!-- ******************************TowerFlat Model **************************************************************** -->
+		<record id="tower_flat_view_tree" model="ir.ui.view">
+	            <field name="name">tower.flat.view.tree</field>
+	            <field name="model">tower.flat</field>
+	            <field name="arch" type="xml">
+	                <tree>
+	                   <!-- <field name="name" />  -->
+	                    <field name="tower_id"/>
+	                    <field name="floor_id" />
+	                    <field name="type"/>
+                        <field name="name" />
+	                </tree>
+	            </field>
+	        </record>
+		
+		<record id="tower_flat_action" model="ir.actions.act_window">
+            <field name="name">Tower Flat</field>
+            <field name="res_model">tower.flat</field>
+            <field name="view_mode">tree</field>
+            <field name = "domain">[('type','=','flat')]</field>
+        </record>
+		
+		 
+		 <record id="tower_shop_action" model="ir.actions.act_window">
+            <field name="name">Tower Shop</field>
+            <field name="res_model">tower.flat</field>
+            <field name="view_mode">tree</field>
+            <field name = "domain">[('type','=','shop')]</field>
+        </record>
+	    <menuitem
+            id="tower_flat_menu"
+            name="Flats"
+            parent="tms_menu"
+            action="tower_managment.tower_flat_action"
+            groups="group_tower_customer_residence"
+            sequence="3"/>
+            
+       
+        <menuitem
+            id="tower_shop_menu"
+            name="Shops"
+            parent="tms_menu"
+            action="tower_managment.tower_shop_action"
+            groups="group_tower_customer_shop"
+            sequence="4"/>
+		
+        <menuitem 
+            id="report_print_menuitem" 
+            name="Report"
+            parent="sale.sale_menu_root"
+            action="report_print_action_view"
+            sequence="50"
+        /> 
+    </data>
+</odoo>
